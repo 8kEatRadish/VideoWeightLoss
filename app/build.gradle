@@ -21,6 +21,10 @@ android {
                 abiFilters  "armeabi-v7a"
             }
         }
+        //不标注这个查找不到so库
+        ndk {
+            abiFilters  "armeabi-v7a"
+        }
     }
 
     buildTypes {
@@ -42,6 +46,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    ndkVersion '23.0.7123448 rc1'
 }
 
 dependencies {
