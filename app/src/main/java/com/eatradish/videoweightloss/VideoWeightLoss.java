@@ -9,6 +9,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * @author suihongwei
+ */
 public class VideoWeightLoss {
     static {
         System.loadLibrary("native-lib");
@@ -19,6 +22,9 @@ public class VideoWeightLoss {
     private final static int STATE_FINISH = 2;
     private final static int STATE_ERROR = 3;
     private static OnHandleListener onHandleListener;
+
+    private final static String MSG_STARTS_WITH = "silence";
+    private final static int PROGRESS_MAX = 100;
 
     public static void execute(final String[] commands, final OnHandleListener onHandleListener) {
         VideoWeightLoss.onHandleListener = onHandleListener;
@@ -57,7 +63,7 @@ public class VideoWeightLoss {
         if (onHandleListener != null) {
             if (position > 0 && duration > 0) {
                 int progress = position * 100 / duration;
-                if (progress < 100 || state == STATE_FINISH || state == STATE_ERROR) {
+                if (progress < PROGRESS_MAX || state == STATE_FINISH || state == STATE_ERROR) {
                     onHandleListener.onProgress(progress, duration);
                 }
             } else {
@@ -69,16 +75,36 @@ public class VideoWeightLoss {
     private static void onMsgCallback(String msg){
         if (msg != null && !msg.isEmpty()) {
             Log.e(TAG, "from native msg=" + msg);
-            if (msg.startsWith("silence") && onHandleListener != null) {
+            if (msg.startsWith(MSG_STARTS_WITH) && onHandleListener != null) {
                 onHandleListener.onMsg(msg);
             }
         }
     }
 
     interface OnHandleListener {
+        /**
+         * 命令执行开始时回调
+         */
         void onBegin();
+
+        /**
+         * 执行信息回调
+         * @param msg 命令执行信息
+         */
         void onMsg(String msg);
+
+        /**
+         * 执行进度
+         * @param position 执行进度
+         * @param duration 总进度
+         */
         void onProgress(int position, int duration);
+
+        /**
+         * 命令执行完成回调
+         * @param resultCode 执行结果
+         * @param resultMsg 执行结果信息
+         */
         void onEnd(int resultCode, String resultMsg);
     }
 }

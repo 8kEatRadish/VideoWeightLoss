@@ -44,9 +44,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
-    ndkVersion '23.0.7123448 rc1'
+    ndkVersion '21.1.6352462'
 }
 
 dependencies {

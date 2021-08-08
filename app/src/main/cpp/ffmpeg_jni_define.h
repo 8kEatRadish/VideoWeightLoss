@@ -1,7 +1,3 @@
-//
-// Created by frank on 2019/11/9.
-//
-
 #ifndef VIDEOWEIGHTLOSS_FFMPEG_JNI_DEFINE_H
 #define VIDEOWEIGHTLOSS_FFMPEG_JNI_DEFINE_H
 
